@@ -164,6 +164,9 @@ func _physics_process(delta):
 			camera_node.fov = 75
 			if log_sens > 0:
 				MOUSE_SENSITIVITY = log_sens
+				
+		if Input.is_action_just_pressed("flashlight"):
+			$Head/Camera/Flashlight.visible = !$Head/Camera/Flashlight.visible
 		# Handle crouch, sprint, walk speed.
 		if Input.is_action_pressed(CROUCH) or is_sliding:
 			current_speed = lerpf(current_speed, crouch_speed, delta * 10.0)
