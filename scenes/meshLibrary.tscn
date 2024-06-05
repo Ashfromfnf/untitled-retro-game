@@ -1,3 +1,42 @@
-[gd_scene format=3 uid="uid://dutsg46pupf8n"]
+[gd_scene load_steps=6 format=3 uid="uid://dutsg46pupf8n"]
+
+[ext_resource type="Material" uid="uid://drc4md3m358xa" path="res://Materials/Grass.tres" id="1_4lj51"]
+[ext_resource type="Material" uid="uid://do8clp5oqfxv8" path="res://Materials/Spruce.tres" id="2_2dovg"]
+[ext_resource type="Material" uid="uid://cn2keoj2h3f76" path="res://Materials/Stone.tres" id="3_u2etg"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_45k5l"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_60j18"]
 
 [node name="MeshLibrary" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.5)
+
+[node name="Grass" type="MeshInstance3D" parent="."]
+material_override = ExtResource("1_4lj51")
+material_overlay = ExtResource("1_4lj51")
+mesh = SubResource("BoxMesh_45k5l")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Grass"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grass/StaticBody3D"]
+shape = SubResource("BoxShape3D_60j18")
+
+[node name="Spruce" type="MeshInstance3D" parent="."]
+material_override = ExtResource("2_2dovg")
+material_overlay = ExtResource("2_2dovg")
+mesh = SubResource("BoxMesh_45k5l")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Spruce"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Spruce/StaticBody3D"]
+shape = SubResource("BoxShape3D_60j18")
+
+[node name="Stone" type="MeshInstance3D" parent="."]
+material_override = ExtResource("3_u2etg")
+material_overlay = ExtResource("3_u2etg")
+mesh = SubResource("BoxMesh_45k5l")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Stone"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stone/StaticBody3D"]
+shape = SubResource("BoxShape3D_60j18")
