@@ -1,6 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://yplcym1bonwu"]
+[gd_scene load_steps=14 format=3 uid="uid://yplcym1bonwu"]
 
 [ext_resource type="Script" path="res://UCharacterBody3D-d676a3eed696c29b733c106bb83204a7e7b47bb4/addons/ultimate_character/ucharacterbody3d.gd" id="1_8074u"]
+[ext_resource type="Environment" uid="uid://b6nhyqn5cb83k" path="res://shaders n stuff/new_environment.tres" id="2_db8eg"]
 [ext_resource type="Texture2D" uid="uid://dt2gxi36n0on0" path="res://textures/Grass_05-128x128.png" id="3_x2xx4"]
 [ext_resource type="Shader" path="res://shaders n stuff/pspost.gdshader" id="4_0w35d"]
 [ext_resource type="Script" path="res://scripts/usedCam.gd" id="5_rr41p"]
@@ -17,6 +18,14 @@ size = Vector3(20, 0.001, 20)
 albedo_texture = ExtResource("3_x2xx4")
 
 [sub_resource type="BoxMesh" id="BoxMesh_hfmmp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1037p"]
+shader = ExtResource("4_0w35d")
+shader_parameter/color_depth = 5
+shader_parameter/dithering = true
+shader_parameter/resolution_scale = 4
+
+[sub_resource type="QuadMesh" id="QuadMesh_gvj2t"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jwkyo"]
 shader = ExtResource("4_0w35d")
@@ -39,21 +48,40 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.65, 0)
 shape = SubResource("CapsuleShape3D_x5obq")
 disabled = true
 
+[node name="Head" type="Node3D" parent="UCharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Camera" type="Camera3D" parent="UCharacterBody3D/Head"]
+environment = ExtResource("2_db8eg")
+current = true
+
+[node name="Flashlight" type="SpotLight3D" parent="UCharacterBody3D/Head/Camera"]
+light_energy = 2.0
+light_indirect_energy = 24.0
+light_size = 0.557
+light_specular = 2.774
+spot_range = 8.0
+spot_angle = 39.75
+
 [node name="RayCast3D" type="RayCast3D" parent="UCharacterBody3D"]
 target_position = Vector3(0, 2, 0)
 
-[node name="Floor" type="Node3D" parent="."]
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.4995, 0.5)
 shape = SubResource("BoxShape3D_mp42y")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D/CollisionShape3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D"]
 transform = Transform3D(20, 0, 0, 0, 0.001, 0, 0, 0, 20, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_m7w0c")
 mesh = SubResource("BoxMesh_hfmmp")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 2.3677, -1)
+material_override = SubResource("ShaderMaterial_1037p")
+extra_cull_margin = 16384.0
+mesh = SubResource("QuadMesh_gvj2t")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -67,18 +95,7 @@ handle_input_locally = false
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
-[node name="cam" type="CharacterBody3D" parent="CanvasLayer/SubViewportContainer/SubViewport"]
+[node name="usedHead" type="Node3D" parent="CanvasLayer/SubViewportContainer/SubViewport"]
 script = ExtResource("5_rr41p")
 
-[node name="usedHead" type="Node3D" parent="CanvasLayer/SubViewportContainer/SubViewport/cam"]
-
-[node name="usedCam" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport/cam/usedHead"]
-
-[node name="Flashlight" type="SpotLight3D" parent="CanvasLayer/SubViewportContainer/SubViewport/cam/usedHead/usedCam"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
-light_energy = 2.0
-light_indirect_energy = 24.0
-light_size = 0.557
-light_specular = 2.774
-spot_range = 8.0
-spot_angle = 39.75
+[node name="usedCam" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport/usedHead"]

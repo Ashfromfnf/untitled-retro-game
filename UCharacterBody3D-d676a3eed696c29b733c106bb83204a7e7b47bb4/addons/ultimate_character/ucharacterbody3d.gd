@@ -53,6 +53,7 @@ var collision_shape_crouch : CollisionShape3D
 var head_node : Node3D
 var camera_node : Camera3D
 var raycast_node : RayCast3D
+var flashlight_node : SpotLight3D
 
 var current_speed = walk_speed
 var slide_timer = 0.0
@@ -78,9 +79,10 @@ func _enter_tree():
 	if !Engine.is_editor_hint():
 		collision_shape_normal = $CollisionShapeNormal
 		collision_shape_crouch = $CollisionShapeCrouch
-		head_node = $Head
-		camera_node = $Head/Camera
+		head_node = $"/root/Node3D/CanvasLayer/SubViewportContainer/SubViewport/cam/usedHead"
+		camera_node = $"/root/Node3D/CanvasLayer/SubViewportContainer/SubViewport/cam/usedHead/usedCam"
 		raycast_node = $RayCast3D
+		flashlight_node = $"/root/Node3D/CanvasLayer/SubViewportContainer/SubViewport/cam/usedHead/usedCam/Flashlight"
 
 func _ready():
 	# Only editor: Create child nodes
@@ -91,11 +93,6 @@ func _ready():
 		if nodes.size() > 0:
 			collision_shape_normal = get_node("CollisionShapeNormal")
 			collision_shape_crouch = get_node("CollisionShapeCrouch")
-			head_node = get_node("Head")
-			camera_node = head_node.get_node("Camera")
-			raycast_node = get_node("RayCast3D")
-		
-		# Create the collision shapes
 		if collision_shape_normal == null:
 			collision_shape_normal = CollisionShape3D.new()
 			collision_shape_normal.name = "CollisionShapeNormal"
@@ -166,7 +163,7 @@ func _physics_process(delta):
 				MOUSE_SENSITIVITY = log_sens
 				
 		if Input.is_action_just_pressed("flashlight"):
-			$Head/Camera/Flashlight.visible = !$Head/Camera/Flashlight.visible
+			flashlight_node.visible = !flashlight_node.visible
 		# Handle crouch, sprint, walk speed.
 		if Input.is_action_pressed(CROUCH) or is_sliding:
 			current_speed = lerpf(current_speed, crouch_speed, delta * 10.0)
