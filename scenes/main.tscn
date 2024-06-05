@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://yplcym1bonwu"]
+[gd_scene load_steps=18 format=3 uid="uid://yplcym1bonwu"]
 
 [ext_resource type="Script" path="res://UCharacterBody3D-d676a3eed696c29b733c106bb83204a7e7b47bb4/addons/ultimate_character/ucharacterbody3d.gd" id="1_8074u"]
 [ext_resource type="Texture2D" uid="uid://dt2gxi36n0on0" path="res://textures/Grass_05-128x128.png" id="3_x2xx4"]
 [ext_resource type="Shader" path="res://shaders n stuff/pspost.gdshader" id="4_0w35d"]
+[ext_resource type="Texture2D" uid="uid://ddogq6lajwlb8" path="res://textures/glasses.png" id="5_kmo7d"]
 [ext_resource type="Script" path="res://scripts/usedCam.gd" id="5_rr41p"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hkbni"]
@@ -10,19 +11,46 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_x5obq"]
 height = 1.3
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_mp42y"]
-size = Vector3(20, 0.001, 20)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m7w0c"]
 albedo_texture = ExtResource("3_x2xx4")
 
-[sub_resource type="BoxMesh" id="BoxMesh_hfmmp"]
+[sub_resource type="QuadMesh" id="QuadMesh_r688p"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mp42y"]
+size = Vector3(20, 0.001, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v423i"]
+metallic = 0.75
+metallic_specular = 1.0
+roughness = 0.0
+emission_enabled = true
+emission = Color(0.252028, 0.252028, 0.252028, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_sb2d3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jwkyo"]
 shader = ExtResource("4_0w35d")
 shader_parameter/color_depth = 5
 shader_parameter/dithering = true
 shader_parameter/resolution_scale = 4
+
+[sub_resource type="Sky" id="Sky_lov8m"]
+
+[sub_resource type="Environment" id="Environment_ajh73"]
+sky = SubResource("Sky_lov8m")
+ambient_light_color = Color(0.336948, 0.305008, 0.542711, 1)
+ambient_light_energy = 4.73
+glow_enabled = true
+glow_normalized = true
+glow_bloom = 1.0
+fog_light_color = Color(0.796131, 0.424952, 0.425158, 1)
+volumetric_fog_density = 0.1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c0ibu"]
+transparency = 1
+albedo_texture = ExtResource("5_kmo7d")
+
+[sub_resource type="QuadMesh" id="QuadMesh_54k7f"]
 
 [node name="Node3D" type="Node3D"]
 
@@ -44,23 +72,40 @@ target_position = Vector3(0, 2, 0)
 
 [node name="Floor" type="Node3D" parent="."]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.5, -0.4995, 0.5)
+material_override = SubResource("StandardMaterial3D_m7w0c")
+mesh = SubResource("QuadMesh_r688p")
+skeleton = NodePath("StaticBody3D/CollisionShape3D")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor/MeshInstance3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.5, 0.5, 0.4995)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/MeshInstance3D/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.4995, 0.5)
 shape = SubResource("BoxShape3D_mp42y")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor/StaticBody3D/CollisionShape3D"]
-transform = Transform3D(20, 0, 0, 0, 0.001, 0, 0, 0, 20, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_m7w0c")
-mesh = SubResource("BoxMesh_hfmmp")
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0.5, -0.4995, -3.53525)
+material_override = SubResource("StandardMaterial3D_v423i")
+mesh = SubResource("QuadMesh_sb2d3")
+skeleton = NodePath("../MeshInstance3D/StaticBody3D/CollisionShape3D")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="CanvasLayer"]
 material = SubResource("ShaderMaterial_jwkyo")
-offset_right = 40.0
-offset_bottom = 40.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="SubViewport" type="SubViewport" parent="CanvasLayer/SubViewportContainer"]
 handle_input_locally = false
@@ -73,6 +118,7 @@ script = ExtResource("5_rr41p")
 [node name="usedHead" type="Node3D" parent="CanvasLayer/SubViewportContainer/SubViewport/cam"]
 
 [node name="usedCam" type="Camera3D" parent="CanvasLayer/SubViewportContainer/SubViewport/cam/usedHead"]
+environment = SubResource("Environment_ajh73")
 
 [node name="Flashlight" type="SpotLight3D" parent="CanvasLayer/SubViewportContainer/SubViewport/cam/usedHead/usedCam"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.3, 0)
@@ -82,3 +128,8 @@ light_size = 0.557
 light_specular = 2.774
 spot_range = 8.0
 spot_angle = 39.75
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CanvasLayer/SubViewportContainer/SubViewport/cam/usedHead/usedCam"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.345237)
+material_override = SubResource("StandardMaterial3D_c0ibu")
+mesh = SubResource("QuadMesh_54k7f")
