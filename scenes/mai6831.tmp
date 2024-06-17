@@ -1,16 +1,13 @@
-[gd_scene load_steps=35 format=3 uid="uid://yplcym1bonwu"]
+[gd_scene load_steps=32 format=3 uid="uid://yplcym1bonwu"]
 
 [ext_resource type="Script" path="res://UCharacterBody3D-d676a3eed696c29b733c106bb83204a7e7b47bb4/addons/ultimate_character/ucharacterbody3d.gd" id="1_8074u"]
 [ext_resource type="Environment" uid="uid://cw4irlwg6wxjm" path="res://shaders n stuff/main.tres" id="2_r3tkh"]
 [ext_resource type="MeshLibrary" uid="uid://bkilce1q33jqm" path="res://Meshes/CubeMeshes_final.tres" id="2_vohpq"]
-[ext_resource type="Script" path="res://scenes/attack.gd" id="3_2ohn3"]
 [ext_resource type="Shader" path="res://shaders n stuff/pspost.gdshader" id="4_0w35d"]
 [ext_resource type="Texture2D" uid="uid://ddogq6lajwlb8" path="res://textures/glasses.png" id="5_kmo7d"]
 [ext_resource type="Script" path="res://scripts/usedCam.gd" id="5_rr41p"]
 [ext_resource type="Script" path="res://scenes/angelBossScript.gd" id="7_4gl2c"]
-[ext_resource type="Texture2D" uid="uid://c036gr6dg8kbl" path="res://textures/viewmodel/idle1.png" id="7_d8h84"]
 [ext_resource type="Texture2D" uid="uid://w763lbp0f2vu" path="res://Meshes/boss/boss1_0.png" id="8_8xfcy"]
-[ext_resource type="Texture2D" uid="uid://c0psaymyco5yf" path="res://textures/viewmodel/parry.png" id="8_17d07"]
 [ext_resource type="Texture2D" uid="uid://dyecd5csj502t" path="res://Meshes/boss/boss1_1.png" id="9_xtxbw"]
 [ext_resource type="Texture2D" uid="uid://bp4gg6x7opmsi" path="res://textures/lazer eyr.png" id="10_i634x"]
 [ext_resource type="Texture2D" uid="uid://d3jq51t7uye66" path="res://Meshes/boss/boss1_2.png" id="11_4skok"]
@@ -606,9 +603,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
 [node name="@RayCast3D@17485" type="RayCast3D" parent="Player"]
 target_position = Vector3(0, 2, 0)
 
-[node name="AttackScript" type="Node" parent="Player"]
-script = ExtResource("3_2ohn3")
-
 [node name="Floor" type="Node3D" parent="."]
 
 [node name="GridMap" type="GridMap" parent="Floor"]
@@ -670,25 +664,6 @@ transform = Transform3D(4, 0, 0, 0, -1.74846e-07, -4, 0, 4, -1.74846e-07, 0, 0, 
 visible = false
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_dhh8h")
-
-[node name="Container" type="Container" parent="CanvasLayer/SubViewportContainer/SubViewport"]
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -20.0
-offset_right = 40.0
-offset_bottom = 20.0
-grow_vertical = 2
-scale = Vector2(1.5, 0.75)
-
-[node name="idle" type="TextureRect" parent="CanvasLayer/SubViewportContainer/SubViewport/Container"]
-layout_mode = 2
-texture = ExtResource("7_d8h84")
-
-[node name="parry" type="TextureRect" parent="CanvasLayer/SubViewportContainer/SubViewport/Container"]
-visible = false
-layout_mode = 2
-texture = ExtResource("8_17d07")
 
 [node name="Eye Boss" type="CharacterBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 19.7691)
